@@ -21,20 +21,22 @@ export default class Starship {
 
         let days = 0;
 
-        if (this._consumables.indexOf('day')) {
+        if (this._consumables.indexOf('day') > -1) {
             days = parseInt(periodInSpace);
         }
-        if (this._consumables.indexOf('week')) {
+        if (this._consumables.indexOf('week') > -1) {
             days = parseInt(periodInSpace)*7;
         }
-        if (this._consumables.indexOf('month')) {
+        if (this._consumables.indexOf('month') > -1) {
             days = parseInt(periodInSpace)*30;
         }
-        if (this._consumables.indexOf('year')) {
+        if (this._consumables.indexOf('year') > -1) {
             days = parseInt(periodInSpace)*365;
         }
 
-        return (days / this._passengers);
+        let result = (days / this._passengers);
+
+        return result;
     }
 
 }

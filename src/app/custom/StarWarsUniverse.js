@@ -1,45 +1,23 @@
 import StarShip from './Starship'
 
 export default class StarWarsUniverse {
-    constructor(count) {
+    constructor() {
 
         this.starships = [];
-        this.count = count;
+        this.count = 0;
         this.allShips = [];
 
         this._getStarshipCount();
         this._createStarships();
         this._validateData()
-        this.theBestStarship;
 
         this.init();
 
     }
 
-    get theBestStarship() {
-
-        // for (let i = 0; i < this.starships.length - 1; i++) {
-        //     console.log(this.starships[i])
-        //     console.log(this.starships[i].maxDaysInSpace)
-
-        // }
-
-        let aaa = this.starships.map(i => {
-            Math.max(i.maxDaysInSpace)
-        });
-
-        // let bbb = this.starships.filter(i => {
-        //     // i.maxDaysInSpace === aaa
-        //     Math.max(i.maxDaysInSpace)
-        // })
-
-        // console.log(aaa)
-
-    }
-
     async _getStarshipCount() {
 
-        await fetch('https://swapi.boom.dev/api/')
+        await fetch('https://swapi.dev/api/')
             .then(response => response.json())
             .then(data => {
 
@@ -48,7 +26,6 @@ export default class StarWarsUniverse {
                     .then(data => {
 
                         this.count = data.count
-
                     });
             });
 
@@ -57,12 +34,12 @@ export default class StarWarsUniverse {
 
     async _createStarships() {
 
-        await fetch('https://swapi.boom.dev/api/starships/')
+        await fetch('https://swapi.dev/api/starships/')
             .then(response => response.json())
             .then(data => {
 
                 let next = data.next;
-                let numberOfPages = data.count / 10 + 1;
+                let numberOfPages = parseInt(data.count / 10 + 1);
 
                 for (let i = 1; i <= numberOfPages; i++) {
                     next = next.substring(0, next.length - 1) + i;
@@ -75,10 +52,10 @@ export default class StarWarsUniverse {
 
                                 data.results.map(j => {
 
-                                    this.allShips.push(j);
+                                    if (!this.allShips.find(o => o.name === j.name)) {
+                                        this.allShips.push(j);
+                                    }
                                 })
-
-
                             });
                     }
                 }
@@ -86,9 +63,7 @@ export default class StarWarsUniverse {
                 this._validateData()
             });
 
-        // console.log(this.allShips)
-
-        return this.allShips;
+        this._validateData();
     }
 
     _validateData() {
@@ -104,34 +79,37 @@ export default class StarWarsUniverse {
 
                 if ((key[element] !== null && key[element] !== undefined && key.consumables != 'unknown' && key.passengers != 'unknown' && key.passengers !== 'n/a' && key.passengers !== '0')) {
 
-                    shipName = new StarShip(key.name, key.consumables, key.passengers)
+                    if (key.passengers.indexOf(',')) {
 
-                    if (this.starships.indexOf(shipName) === -1) {
-
-                        if (key.passengers.indexOf(',')) {
-
-                            var specialChars = ",";
-                            key.passengers = key.passengers.replace(new RegExp("\\" + specialChars, "gi"), "");
-                        }
-
-                        this.starships.push(shipName)
-                        break
+                        var specialChars = ",";
+                        key.passengers = key.passengers.replace(new RegExp("\\" + specialChars, "gi"), "");
                     }
 
+                    shipName = new StarShip(key.name, key.consumables, key.passengers)
+
+                    if (!this.starships.find(o => o.name === key.name)) {
+
+                        this.starships.push(shipName)
+                    }
                 }
             }
         }
-        console.log(this.starships)
+        return this.starships;
+    }
+
+    get theBestStarship() {
+
+        const maxValueOfY = Math.max(...this.starships.map(o => o.maxDaysInSpace), 0);
+
+        let highestShip = this.starships.find(i => i.maxDaysInSpace === maxValueOfY);
+
+        return highestShip;
     }
 
     async init() {
 
         await this._getStarshipCount();
         await this._createStarships();
-
         this.theBestStarship;
-
-        // console.log(this.allShips.length)
-
     }
 }

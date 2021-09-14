@@ -16,7 +16,7 @@ export default class Application extends EventEmitter {
 
     this.config = config;
     this.data = {
-      universe : new StarWarsUniverse()
+      universe: new StarWarsUniverse()
     };
 
     this.init();
@@ -37,7 +37,14 @@ export default class Application extends EventEmitter {
 
     await this.data.universe.init();
 
+    // console.log((await this.data.universe._getStarshipCount()))
+    // console.log((await this.data.universe._createStarships()))
+    // console.log((await this.data.universe._validateData()))
+    // console.log((await this.data.universe.theBestStarship))
+
+
     this.emit(Application.events.APP_READY);
   }
-}
 
+
+}
