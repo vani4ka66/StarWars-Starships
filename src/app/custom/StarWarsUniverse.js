@@ -9,28 +9,32 @@ export default class StarWarsUniverse {
 
         this._getStarshipCount();
         this._createStarships();
-        this.validateData()
+        this._validateData()
+        this.theBestStarship;
 
         this.init();
 
     }
 
-    // get theBestStarship() {
-    //     return this.starships.map(i => {
-
-    //     })
-    // }
-
     get theBestStarship() {
-        for(let i = 0; i < this.starships.length - 1; i++){
-            console.log(this.starships[i])
-            console.log(this.starships[i].maxDaysInSpace)
 
-            // let a = this.starships[i].maxDaysInSpace;
-            // let b = this.theBestStarship.starships[i + 1]
+        // for (let i = 0; i < this.starships.length - 1; i++) {
+        //     console.log(this.starships[i])
+        //     console.log(this.starships[i].maxDaysInSpace)
 
+        // }
 
-        }
+        let aaa = this.starships.map(i => {
+            Math.max(i.maxDaysInSpace)
+        });
+
+        // let bbb = this.starships.filter(i => {
+        //     // i.maxDaysInSpace === aaa
+        //     Math.max(i.maxDaysInSpace)
+        // })
+
+        // console.log(aaa)
+
     }
 
     async _getStarshipCount() {
@@ -79,7 +83,7 @@ export default class StarWarsUniverse {
                     }
                 }
 
-                this.validateData()
+                this._validateData()
             });
 
         // console.log(this.allShips)
@@ -87,8 +91,7 @@ export default class StarWarsUniverse {
         return this.allShips;
     }
 
-    validateData() {
-
+    _validateData() {
         for (let i = 0; i < 36; i++) {
 
             this.allShips[i]
@@ -126,7 +129,7 @@ export default class StarWarsUniverse {
         await this._getStarshipCount();
         await this._createStarships();
 
-        this.theBestStarship();
+        this.theBestStarship;
 
         // console.log(this.allShips.length)
 
