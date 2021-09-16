@@ -62,8 +62,6 @@ export default class StarWarsUniverse {
 
                 this._validateData()
             });
-
-        this._validateData();
     }
 
     _validateData() {
